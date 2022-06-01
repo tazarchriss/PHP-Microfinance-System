@@ -12,7 +12,16 @@
     
      include 'include/header.php'; ?>
         <div id="layoutSidenav">
-        <?php include 'include/adminnav.php'; ?>
+        <?php 
+        
+        if ($_SESSION['role']=='1') {
+        include 'include/adminnav.php'; 
+        }
+        else{
+            include 'include/staffnav.php'; 
+        }
+        
+        ?>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4 mt-2">
@@ -93,9 +102,16 @@
                                 </td>
                                 <td>
                                 <div class="text-center">
-                                  <a class="bg-dark p-1 text-light" href="singlecustomer.php?id=<?php echo $row['cust_id'];?>"><i class="fa fa-eye "></i></a>
-                                  <a class="bg-dark text-light p-1" href="config/deletecustomer.php?id=<?php echo $row['cust_id'];?>"><i class="fa fa-trash "></i></a>
-                                  </div>
+                                  <a class="bg-primary p-1 text-light btn btn-sm" href="singlecustomer.php?id=<?php echo $row['cust_id'];?>"><i class="fa fa-eye"></i></a>
+                                  <?php 
+        
+                                if ($_SESSION['role']=='1') {
+                                ?>
+                                  <a class="bg-danger text-light btn btn-sm p-1" href="config/deletecustomer.php?id=<?php echo $row['cust_id'];?>"><i class="fa fa-trash"></i></a>
+                                <?php }
+                                ?>  
+                                
+                                </div>
                                 </td>
                                  </tr>
 
