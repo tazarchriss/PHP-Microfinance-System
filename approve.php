@@ -9,7 +9,8 @@
    
     $sql1="SELECT * FROM loan_request,customer 
     WHERE loan_request.req_status='Pending'
-    AND customer.cust_id=loan_request.customer";
+    AND customer.cust_id=loan_request.customer
+    ORDER BY loan_request.req_date DESC";
     $qry1=mysqli_query($conn,$sql1);
     
     include 'include/header.php'; ?>
@@ -82,7 +83,7 @@
                                 </td>
                                 <td>
                                 <div class="text-center">
-                                  <a class="bg-dark p-1 text-light btn btn-sm" href="config/accept_loan.php?id=<?php echo $row['req_id'];?>">Accept</a>
+                                  <a class="bg-primary p-1 text-light btn btn-sm" href="config/accept_loan.php?id=<?php echo $row['req_id'];?>">Accept</a>
                                   <a class="bg-danger text-light p-1 btn btn-sm" href="config/decline_loan.php?id=<?php echo $row['req_id'];?>"><i>Decline</i></a>
                                   </div>
                                 </td>
