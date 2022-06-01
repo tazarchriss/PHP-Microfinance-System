@@ -1,7 +1,29 @@
-<!-- This is the page that views all loans that have been cleared -->
-<?php include 'include/header.php'; ?>
+<!-- This is the page that views all loans that have not been paid off -->
+<?php
+  session_start();
+  include 'config/connection.php';
+  if ($_SESSION['id']=='') {
+    header('Location:index.php');
+  }
+  else{
+   
+    $sql1="SELECT * FROM loan,customer 
+    WHERE loan.loan_status='Cleared'
+    AND customer.cust_id=loan.customer";
+    $qry1=mysqli_query($conn,$sql1);
+    
+    include 'include/header.php'; ?>
         <div id="layoutSidenav">
-        <?php include 'include/adminnav.php'; ?>
+        <?php 
+        
+        if ($_SESSION['role']=='1') {
+        include 'include/adminnav.php'; 
+        }
+        else{
+            include 'include/staffnav.php'; 
+        }
+        
+        ?>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4 mt-2">
@@ -12,35 +34,75 @@
                         
                         <div class="card mb-4">
                             <div class="card-header bg-dark text-secondary">
-                                <i class="fas fa-users me-1"></i>
-                                All Customers
+                                <i class="fas fa-file me-1"></i>
+                                 Paid Loans
                             </div>
                             <div class="card-body">
+                           <?php     
+                            if (mysqli_num_rows($qry1) == 0){
+
+                                ?>
+                                <h4 class="text-danger text-center">Sorry, there are no cleared loans currently !</h4>
+
+                                <?php
+                            }
+                            else{ ?>
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                            <th>SN</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
+                                            <th>Paid </th>
+                                            <th>Fine</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </tfoot>
-                                   <tbody></tbody>
+                               
+                                   <tbody>
+                                   <?php
+                                for ($i=1; $i<=mysqli_num_rows($qry1); $i++){
+                                $row = mysqli_fetch_array($qry1);
+                           
+                                 ?>
+                                 <tr>
+                                 <td>
+                                <?php echo $i; ?></td>
+                                <td>
+                                <h6> <?php echo $row['fname'].' '.$row['mname'].' '.$row['lname']; ?></h6> 
+                                </td>
+                               
+                                <td>
+                                <h6><?php echo $row['issued_amount']; ?> </h6>
+                                
+                                </td>
+                                <td>
+                                <h6><?php echo $row['paid_amount']; ?> </h6>
+                                
+                                </td>
+                                <td>
+                                <h6><?php echo $row['fine']; ?> </h6>
+                                
+                                </td>
+                            
+                                <td>
+                                <div class="text-center">
+                                  <a class="bg-primary p-1 text-light btn btn-sm" href="payment.php?id=<?php echo $row['loan_id'];?>">View Loan</a>
+                                 
+                                </td>
+                                 </tr>
+
+                                   <?php 
+                                    }
+                                }
+                                    ?>
+                                   </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </main>
-                <?php include 'include/footer.php'; ?>
+                <?php include 'include/footer.php'; 
+                
+                            }
+                ?>
