@@ -1,7 +1,24 @@
 <!-- This is the page for adding a new staff -->
-<?php include 'include/header.php'; ?>
+
+<?php
+  session_start();
+  include 'config/connection.php';
+  if ($_SESSION['id']=='') {
+    header('Location:index.php');
+  }
+  else{
+     include 'include/header.php'; ?>
         <div id="layoutSidenav">
-        <?php include 'include/adminnav.php'; ?>
+        <?php 
+        
+        if ($_SESSION['role']=='1') {
+        include 'include/adminnav.php'; 
+        }
+        else{
+            include 'include/staffnav.php'; 
+        }
+        
+        ?>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4 mt-2">
@@ -81,7 +98,7 @@
     
                                             <div class="mt-4 mb-0">
                                                 <div class="d-grid">
-                                                    <button type="submit" name="save" class="btn btn-primary btn-block">Save Customer</button>
+                                                    <button type="submit" name="save" class="btn btn-outline-primary btn-block"><i class="fa fa-save"></i> Save Customer</button>
                                                     
                                                 </div>
                                             </div>
@@ -90,4 +107,6 @@
                         </div>
                     </div>
                 </main>
-                <?php include 'include/footer.php'; ?>
+                <?php include 'include/footer.php'; 
+  }
+                ?>
