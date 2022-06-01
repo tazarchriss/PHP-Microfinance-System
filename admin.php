@@ -20,55 +20,80 @@
                         <h5 class="mt-4">Dashboard</h5>
                         <hr>
                         <div class="row">
-                            <div class="col-xl-3 col-md-6">
+                        <div class="col-xl-3 col-md-6">
+                                <?php
+                                    $sql1="SELECT * FROM customer";
+                                    $qry1=mysqli_query($conn,$sql1);
+                                    $customers=mysqli_num_rows($qry1);
+                                ?>
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Primary Card</div>
+                                    <div class="card-body">Total Customers</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link nav-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        <a class="small text-white stretched-link nav-link" href="#"><?php echo $customers; ?></a>
+                                        <div class="small text-white"><i class="fas fa-users"></i></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
+                            <?php
+                                    $sql1="SELECT * FROM user WHERE id!='$id'";
+                                    $qry1=mysqli_query($conn,$sql1);
+                                    $staff=mysqli_num_rows($qry1);
+                                ?>
                                 <div class="card bg-warning text-dark mb-4">
-                                    <div class="card-body">Warning Card</div>
+                                    <div class="card-body">Total Staffs</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-dark stretched-link nav-link" href="#">View Details</a>
-                                        <div class="small text-dark"><i class="fas fa-angle-right"></i></div>
+                                        <a class="small text-dark stretched-link nav-link" href="#"><?php echo $staff; ?></a>
+                                        <div class="small text-dark"><i class="fas fa-user-tie"></i></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
+                            <?php
+                             
+                                $sql="SELECT SUM(issued_amount) FROM loan ";
+                                $qry=mysqli_query($conn,$sql);
+                                $res=mysqli_fetch_array($qry);
+
+                                ?>
                                 <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Success Card</div>
+                                    <div class="card-body">Issued Loans</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link nav-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    <a class="small text-dark stretched-link nav-link" href="#">
+                                        <?php echo $res['SUM(issued_amount)'].' Tsh'; 
+                                        if ($res['SUM(issued_amount)']=='') {
+                                            echo '00';
+                                        }
+                                        ?>    
+                                        </a>
+                                        <div class="small text-white"><i class="fas fa-file"></i></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
+                            <?php
+                             
+                             $sql="SELECT SUM(amount) FROM payment ";
+                             $qry=mysqli_query($conn,$sql);
+                             $res=mysqli_fetch_array($qry);
+
+                             ?>
                                 <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
+                                    <div class="card-body">Total Payments</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link nav-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        <a class="small text-white stretched-link nav-link" href="#">
+                                        <?php echo $res['SUM(amount)'].' Tsh '; 
+                                        if ($res['SUM(amount)']=='') {
+                                            echo '00';
+                                        }
+                                        ?>
+                                        </a>
+                                        <div class="small text-white"><i class="fas fa-download"></i></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header bg-dark text-secondary">
-                                        <i class="fas fa-chart-area me-1"></i>
-                                        Daily Transactions
-                                    </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                                </div>
-                            </div>
- 
-                        </div>
+                      
                   
                     </div>
                 </main>
