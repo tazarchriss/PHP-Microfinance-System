@@ -14,7 +14,16 @@
     
     include 'include/header.php'; ?>
         <div id="layoutSidenav">
-        <?php include 'include/adminnav.php'; ?>
+        <?php 
+        
+        if ($_SESSION['role']=='1') {
+        include 'include/adminnav.php'; 
+        }
+        else{
+            include 'include/staffnav.php'; 
+        }
+        
+        ?>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4 mt-2">
@@ -62,7 +71,11 @@
                                             <th>Customer</th>
                                             <th>Amount</th>
                                             <th>Reason</th>
+                                            <?php 
+        
+                                            if ($_SESSION['role']=='1') { ?>
                                             <th>Action</th>
+                                            <?php } ?>
                                         </tr>
                                     </thead>
                             
@@ -92,13 +105,17 @@
                                 <h6><?php echo $row['reason']; ?> </h6>
                                 
                                 </td>
+                                <?php 
+        
+                                if ($_SESSION['role']=='1') { ?>
                                 <td>
                                 <div class="text-center">
-                                  <a class="bg-dark p-1 text-light btn btn-block btn-sm" href="config/accept_loan.php?id=<?php echo $row['req_id'];?>">Accept</a>
+                                  <a class="bg-primary p-1 text-light btn btn-block btn-sm" href="config/accept_loan.php?id=<?php echo $row['req_id'];?>">Accept</a>
                                   <a class="bg-danger p-1 text-light btn btn-block btn-sm" href="config/delete_request.php?id=<?php echo $row['req_id'];?>">Delete</a>
                                
                                   </div>
                                 </td>
+                                <?php } ?>
                                  </tr>
 
                                    <?php 
