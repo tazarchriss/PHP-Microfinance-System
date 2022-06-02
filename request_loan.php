@@ -8,12 +8,21 @@
   else{
    
     $customer=$_GET['id'];
-    $sql1="SELECT * FROM loan WHERE customer='$customer'";
+    $sql1="SELECT * FROM loan WHERE customer='$customer'AND loan_status='Unpaid'";
     $qry1=mysqli_query($conn,$sql1);
     
      include 'include/header.php'; ?>
         <div id="layoutSidenav">
-        <?php include 'include/adminnav.php'; ?>
+        <?php 
+        
+        if ($_SESSION['role']=='1') {
+        include 'include/adminnav.php'; 
+        }
+        else{
+            include 'include/staffnav.php'; 
+        }
+        
+        ?>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4 mt-2">
@@ -108,7 +117,7 @@
     
                                             <div class="mt-4 mb-0">
                                                 <div class="d-grid">
-                                                    <button type="submit" name="issue" class="btn btn-primary btn-block">Issue Loan</button>
+                                                    <button type="submit" name="issue" class="btn btn-outline-primary btn-block"><i class="fa fa-download"></i> Issue Loan</button>
                                                     
                                                 </div>
                                             </div>
@@ -170,8 +179,7 @@
                                 </td>
                                 <td>
                                 <div class="text-center">
-                                  <a class="bg-dark p-1 text-light" href="EditEarning.php?id=<?php echo $row['id'];?>"><i class="fa fa-eye"></i></a>
-                                  <a class="bg-dark text-light p-1" href="config/deletestaff.php?id=<?php echo $row['id'];?>"><i class="fa fa-trash "></i></a>
+                                <a class="bg-primary p-1 text-light btn btn-sm" href="payment.php?id=<?php echo $row['loan_id'];?>">Payment</a>
                                   </div>
                                 </td>
                                  </tr>
