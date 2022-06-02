@@ -10,7 +10,7 @@
                 </footer>
             </div>
         </div>
-        <script src="js/boostrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="js/chart.min.js" crossorigin="anonymous"></script>
         <script src="assets/demo/chart-area-demo.js"></script>
