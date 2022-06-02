@@ -2,7 +2,7 @@
 
 
 
-#Follow the following steps to install this system:
+Follow the following steps to install this system:
 --------------------------------------------------
 
 1:Unzip the zipped folder
@@ -25,5 +25,6 @@
 
 Login Credentials
 ========================
-#Email:group8its@mustudents.com
-#Password: admin
+Email:group8its@mustudents.com
+
+Password: admin
