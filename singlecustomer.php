@@ -14,7 +14,16 @@
     
      include 'include/header.php'; ?>
         <div id="layoutSidenav">
-        <?php include 'include/adminnav.php'; ?>
+        <?php 
+        
+        if ($_SESSION['role']=='1') {
+        include 'include/adminnav.php'; 
+        }
+        else{
+            include 'include/staffnav.php'; 
+        }
+        
+        ?>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4 mt-2">
@@ -117,7 +126,7 @@
                                  
                                    </tbody>
                                 </table>
-                                <a href="request_loan.php?id=<?php echo $row['cust_id']; ?>" class="btn btn-primary">Issue Loan</a>
+                                <a href="request_loan.php?id=<?php echo $row['cust_id']; ?>" class="btn btn-outline-primary col-md-5"><i class="fa fa-download"></i> Issue Loan</a>
                                 
                             </div>
                         </div>
