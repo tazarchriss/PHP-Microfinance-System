@@ -1,84 +1,109 @@
-<!-- This is staff's home page -->
+<!-- This is the page that views all loans that have not been paid off -->
 <?php
   session_start();
   include 'config/connection.php';
-  if ($_SESSION['role']!='2') {
+  if ($_SESSION['id']=='') {
     header('Location:index.php');
   }
   else{
-    $id=$_SESSION['id'];
-     include 'include/header.php'; ?>
+   
+    $sql1="SELECT * FROM loan,customer 
+    WHERE loan.loan_status='Unpaid'
+    AND customer.cust_id=loan.customer
+    ORDER BY loan.issued_date DESC";
+    $qry1=mysqli_query($conn,$sql1);
+    
+    include 'include/header.php'; ?>
         <div id="layoutSidenav">
-        <?php include 'include/staffnav.php'; ?>
+        <?php 
+        
+        if ($_SESSION['role']=='1') {
+        include 'include/adminnav.php'; 
+        }
+        else{
+            include 'include/staffnav.php'; 
+        }
+        
+        ?>
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="container-fluid px-4">
-                        <h5 class="mt-4">Dashboard</h5>
-                        <hr>
-                        <div class="row">
-                            <div class="col-xl-3 col-md-6">
+                    <div class="container-fluid px-4 mt-2">
+                        <ol class="breadcrumb mb-4 text-right">
+                            <li class="breadcrumb-item active"><i class="fa fa-file"></i> Manage Loans/Active Loans</li>
+                        </ol>
+                     
+                        
+                        <div class="card mb-4">
+                            <div class="card-header bg-dark text-secondary">
+                                <i class="fas fa-file me-1"></i>
+                                 Unpaid Loans
+                            </div>
+                            <div class="card-body">
+                           <?php     
+                            if (mysqli_num_rows($qry1) == 0){
+
+                                ?>
+                                <h4 class="text-danger text-center">Sorry, there are no active loans currently !</h4>
+
                                 <?php
-                                    $sql1="SELECT * FROM customer";
-                                    $qry1=mysqli_query($conn,$sql1);
-                                    $customers=mysqli_num_rows($qry1);
-                                ?>
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Total Customers</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link nav-link" href="#"><?php echo $customers; ?></a>
-                                        <div class="small text-white"><i class="fas fa-users"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                            <?php
-                                    $sql1="SELECT * FROM payment WHERE staff='$id'";
-                                    $qry1=mysqli_query($conn,$sql1);
-                                    $staff=mysqli_num_rows($qry1);
-                                ?>
-                                <div class="card bg-warning text-dark mb-4">
-                                    <div class="card-body">Received Payments</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-dark stretched-link nav-link" href="#"><?php echo $staff; ?></a>
-                                        <div class="small text-dark"><i class="fas fa-download"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                            <?php
-                                    $sql1="SELECT * FROM loan  WHERE loan_status='Unpaid'";
-                                    $qry1=mysqli_query($conn,$sql1);
-                                    $loans=mysqli_num_rows($qry1);
-                                ?>
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Active Loans</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link nav-link" href="#"><?php echo $loans; ?></a>
-                                        <div class="small text-white"><i class="fas fa-file"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                            <!-- <?php
-                                    $sql1="SELECT * FROM loan_request WHERE staff='$id' AND req_status='Declined'";
-                                    $qry1=mysqli_query($conn,$sql1);
-                                    $declined=mysqli_num_rows($qry1);
-                                ?> -->
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Declined Loans</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link nav-link" href="#"><?php echo $declined; ?></a>
-                                        <div class="small text-white"><i class="fas fa-trash"></i></div>
-                                    </div>
-                                </div>
+                            }
+                            else{ ?>
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>SN</th>
+                                            <th>Customer</th>
+                                            <th>Return Date</th>
+                                            <th>Amount</th>
+                                            <th>Paid </th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                               
+                                   <tbody>
+                                   <?php
+                                for ($i=1; $i<=mysqli_num_rows($qry1); $i++){
+                                $row = mysqli_fetch_array($qry1);
+                           
+                                 ?>
+                                 <tr>
+                                 <td>
+                                <?php echo $i; ?></td>
+                                <td>
+                                <h6> <?php echo $row['fname'].' '.$row['mname'].' '.$row['lname']; ?></h6> 
+                                </td>
+                                <td>
+                                <h6><?php echo $row['pay_date']; ?></h6>
+                                
+                                </td>
+                                <td>
+                                <h6><?php echo $row['issued_amount']; ?> </h6>
+                                
+                                </td>
+                                <td>
+                                <h6><?php echo $row['paid_amount']; ?> </h6>
+                                
+                                </td>
+                                
+                            
+                                <td>
+                                <div class="text-center">
+                                  <a class="bg-primary p-1 text-light btn btn-sm" href="payment.php?id=<?php echo $row['loan_id'];?>">Payment</a>
+                                 
+                                </td>
+                                 </tr>
+
+                                   <?php 
+                                    }
+                                }
+                                    ?>
+                                   </tbody>
+                                </table>
                             </div>
                         </div>
-               
-                  
                     </div>
                 </main>
-                <?php include 'include/footer.php';
+                <?php include 'include/footer.php'; 
                 
-  }
+                            }
                 ?>
-
